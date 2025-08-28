@@ -32,9 +32,10 @@ build = {
       "src/luaharfbuzz/direction.c",
       "src/luaharfbuzz/language.c",
       "src/luaharfbuzz/variation.c",
-      "src/luaharfbuzz/class_utils.c"
+      "src/luaharfbuzz/class_utils.c",
+      "src/luaharfbuzz/subset.c"
       },
-      libraries = {"harfbuzz"},
+      libraries = {"harfbuzz","harfbuzz-subset"},
       incdirs = {"$(HARFBUZZ_INCDIR)/harfbuzz"},
       libdirs = {"$(HARFBUZZ_LIBDIR)"}
     }

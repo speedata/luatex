@@ -153,7 +153,6 @@ static int buffer_add_codepoints(lua_State *L) {
   Buffer *b = (Buffer *)luaL_checkudata(L, 1, "harfbuzz.Buffer");
   unsigned int item_offset;
   int item_length;
-  int i;
 
   luaL_checktype(L, 2, LUA_TTABLE);
   item_offset = luaL_optinteger(L, 3, 0);
@@ -163,7 +162,7 @@ static int buffer_add_codepoints(lua_State *L) {
 
   hb_codepoint_t *text = (hb_codepoint_t *) malloc(n * sizeof(hb_codepoint_t));
 
-  for (i = 0; i != n; ++i) {
+  for (unsigned int i = 0; i != n; ++i) {
     lua_geti(L, 2, i + 1);
     hb_codepoint_t c = (hb_codepoint_t) luaL_checkinteger(L, -1);
     text[i] = c;

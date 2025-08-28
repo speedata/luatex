@@ -5,7 +5,6 @@
 #include "luaharfbuzz.h"
 
 int subset_create(lua_State *L) {
-  printf("Creating subset input...\n");
   hb_subset_input_t *input;
   input = hb_subset_input_create_or_fail();
   if (input == NULL) {
