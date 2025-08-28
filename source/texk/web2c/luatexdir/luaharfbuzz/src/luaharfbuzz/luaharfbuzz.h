@@ -42,3 +42,6 @@ int register_unicode(lua_State *L);
 
 // Missed declaration
 int luaopen_luaharfbuzz (lua_State *L);
+
+int register_subset(lua_State *L);
+int register_set(lua_State *L);

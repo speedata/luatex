@@ -611,6 +611,33 @@ static int face_var_normalize_coords(lua_State *L) {
   return count;
 }
 
+// Writes the face to a file. The file name is passed as the second argument.
+static int face_write(lua_State *L) {
+  Face *f = (Face *)luaL_checkudata(L, 1, "harfbuzz.Face");
+  const char *file_name = luaL_checkstring(L, 2);
+
+  hb_blob_t* out_blob = hb_face_reference_blob(*f);
+  unsigned int out_len = 0;
+  const char* out_data = hb_blob_get_data(out_blob, &out_len);
+  FILE* out = fopen(file_name, "wb");
+  if (!out) {
+    lua_pushnil(L);
+    lua_pushfstring(L, "Could not open file '%s' for writing", file_name);
+    return 2;
+  }
+  // write and check for errors
+  if (fwrite(out_data, 1, out_len, out) != out_len) {
+    fclose(out);
+    lua_pushnil(L);
+    lua_pushfstring(L, "Could not write to file '%s'", file_name);
+    return 2;
+  }
+  fclose(out);
+  hb_blob_destroy(out_blob);
+  lua_pushboolean(L, 1);
+  return 1;
+}
+
 static int face_destroy(lua_State *L) {
   Face *f = (Face *)luaL_checkudata(L, 1, "harfbuzz.Face");
 
@@ -647,6 +674,7 @@ static const struct luaL_Reg face_methods[] = {
   { "ot_var_named_instance_get_design_coords", face_var_named_instance_get_design_coords },
   { "ot_var_normalize_variations", face_var_normalize_variations },
   { "ot_var_normalize_coords", face_var_normalize_coords },
+  { "write", face_write },
   { NULL, NULL }
 };
 

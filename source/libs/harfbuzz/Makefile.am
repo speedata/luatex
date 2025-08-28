@@ -33,7 +33,7 @@ AM_CPPFLAGS = -DHB_NO_MT -DHAVE_FALLBACK=1 \
 AM_CXXFLAGS = $(VISIBILITY_CXXFLAGS) $(WARNING_CXXFLAGS)
 
 libharfbuzz_dependencies =
-libharfbuzz_a_SOURCES = @HARFBUZZ_TREE@/src/harfbuzz.cc
+libharfbuzz_a_SOURCES = @HARFBUZZ_TREE@/src/harfbuzz.cc @HARFBUZZ_TREE@/src/harfbuzz-subset.cc
 
 ## Graphite library
 AM_CPPFLAGS += $(GRAPHITE2_INCLUDES)
