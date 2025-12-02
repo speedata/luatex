@@ -1,45 +1,31 @@
-## texk/web2c/luatexdir/am/luaharfbuzz.am: Makefile fragment for luaharfbuzz.
+## texk/web2c/luatexdir/am/luaharfbuzzsubset.am: Makefile fragment for luaharfbuzzsubset.
 ##
 ## Copyright (C) 2019 Khaled Hosny
 ## You may freely use, modify and/or distribute this file.
 
-## luaharfbuzz
+## luaharfbuzzsubset
 ##
-EXTRA_LIBRARIES += libluaharfbuzz.a libluajitharfbuzz.a
+EXTRA_LIBRARIES += libluaharfbuzzsubset.a libluajitharfbuzzsubset.a
 
-libluaharfbuzz_a_DEPENDENCIES = $(HARFBUZZ_DEPEND) $(GRAPHITE2_DEPEND)
-libluajitharfbuzz_a_DEPENDENCIES = $(HARFBUZZ_DEPEND) $(GRAPHITE2_DEPEND)
+libluaharfbuzzsubset_a_DEPENDENCIES = $(HARFBUZZ_DEPEND) $(GRAPHITE2_DEPEND)
+libluajitharfbuzzsubset_a_DEPENDENCIES = $(HARFBUZZ_DEPEND) $(GRAPHITE2_DEPEND)
 
-$(libluaharfbuzz_a_OBJECTS): $(LUA_DEPEND)
-$(libluajitharfbuzz_a_OBJECTS): $(LUAJIT_DEPEND)
+$(libluaharfbuzzsubset_a_OBJECTS): $(LUA_DEPEND)
+$(libluajitharfbuzzsubset_a_OBJECTS): $(LUAJIT_DEPEND)
 
 
-libluaharfbuzz_a_CPPFLAGS = $(AM_CPPFLAGS) $(LUA_INCLUDES) $(HARFBUZZ_INCLUDES) $(GRAPHITE2_INCLUDES)
-libluajitharfbuzz_a_CPPFLAGS = $(AM_CPPFLAGS) $(LUAJIT_INCLUDES) $(LUAJIT_DEFINES) $(HARFBUZZ_INCLUDES) $(GRAPHITE2_INCLUDES)
-libluajitharfbuzz_a_CPPFLAGS += -DLuajitTeX
+libluaharfbuzzsubset_a_CPPFLAGS = $(AM_CPPFLAGS) $(LUA_INCLUDES) $(HARFBUZZ_INCLUDES) $(GRAPHITE2_INCLUDES)
+libluajitharfbuzzsubset_a_CPPFLAGS = $(AM_CPPFLAGS) $(LUAJIT_INCLUDES) $(LUAJIT_DEFINES) $(HARFBUZZ_INCLUDES) $(GRAPHITE2_INCLUDES)
+libluajitharfbuzzsubset_a_CPPFLAGS += -DLuajitTeX
 
-libluaharfbuzz_a_CFLAGS = # $(WARNING_CFLAGS)
-libluajitharfbuzz_a_CFLAGS = # $(WARNING_CFLAGS)
+libluaharfbuzzsubset_a_CFLAGS = # $(WARNING_CFLAGS)
+libluajitharfbuzzsubset_a_CFLAGS = # $(WARNING_CFLAGS)
 
-libluaharfbuzz_a_SOURCES = \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/blob.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/buffer.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/class_utils.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/direction.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/face.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/feature.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/font.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/language.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/luaharfbuzz.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/luaharfbuzz.h \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/ot.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/script.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/set.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/tag.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/unicode.c \
-	luatexdir/luaharfbuzz/src/luaharfbuzz/variation.c
+libluaharfbuzzsubset_a_SOURCES = \
+	luatexdir/luaharfbuzz/src/luaharfbuzzsubset/luaharfbuzzsubset.c \
+	luatexdir/luaharfbuzz/src/luaharfbuzzsubset/subset-input.c
 
-libluajitharfbuzz_a_SOURCES = $(libluaharfbuzz_a_SOURCES)
+libluajitharfbuzzsubset_a_SOURCES = $(libluaharfbuzzsubset_a_SOURCES)
 
 ## Not used
 ##
