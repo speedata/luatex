@@ -1,5 +1,20 @@
 #include "luaharfbuzz.h"
 
+#ifdef LuajitTeX
+static int lua_absindex (lua_State *L, int i) {
+  if (i < 0 && i > LUA_REGISTRYINDEX)
+    i += lua_gettop(L) + 1;
+  return i;
+}
+static int lua_geti (lua_State *L, int index, lua_Integer i) {
+  index = lua_absindex(L, index);
+  lua_pushinteger(L, i);
+  lua_gettable(L, index);
+  return lua_type(L, -1);
+}
+#endif
+
+
 static int buffer_new(lua_State *L) {
   Buffer *b;
 

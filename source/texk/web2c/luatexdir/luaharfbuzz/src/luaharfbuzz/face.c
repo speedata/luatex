@@ -1,5 +1,21 @@
 #include "luaharfbuzz.h"
 
+#ifdef LuajitTeX
+
+static int lua_absindex (lua_State *L, int i) {
+  if (i < 0 && i > LUA_REGISTRYINDEX)
+    i += lua_gettop(L) + 1;
+  return i;
+}
+static void lua_seti (lua_State *L, int index, lua_Integer i) {
+  index = lua_absindex(L, index);
+  lua_pushinteger(L, i);
+  lua_insert(L, -2);
+  lua_settable(L, index);
+}
+#endif
+
+
 /* Size of static arrays we use to avoid heap allocating memory when reading
  * data from HarfBuzz. */
 #define STATIC_ARRAY_SIZE 128

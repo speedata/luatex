@@ -1,5 +1,19 @@
 #include "luaharfbuzz.h"
 
+#ifdef LuajitTeX
+static int lua_absindex (lua_State *L, int i) {
+  if (i < 0 && i > LUA_REGISTRYINDEX)
+    i += lua_gettop(L) + 1;
+  return i;
+}
+static int lua_geti (lua_State *L, int index, lua_Integer i) {
+  index = lua_absindex(L, index);
+  lua_pushinteger(L, i);
+  lua_gettable(L, index);
+  return lua_type(L, -1);
+}
+#endif
+
 static int shape_full (lua_State *L) {
   Font *font = (Font *)luaL_checkudata(L, 1, "harfbuzz.Font");
   Buffer *buf = (Buffer *)luaL_checkudata(L, 2, "harfbuzz.Buffer");
@@ -101,7 +115,21 @@ int luaopen_luaharfbuzz (lua_State *L) {
   register_set(L);
   lua_setfield(L, -2, "Set");
 
+#ifdef LuajitTeX
+  luaL_register(L,NULL, lib_table);
+  /**/
+  lua_pushvalue(L, -1);
+  lua_setglobal(L,"luaharfbuzz");
+  /**/
+  lua_getglobal(L, "package");
+  lua_getfield(L, -1, "loaded");
+  lua_remove(L, -2);
+  lua_pushvalue(L, -2);
+  lua_setfield(L, -2, "luaharfbuzz");
+  /**/
+#else
   luaL_setfuncs(L, lib_table, 0);
+#endif
 
   return 1;
 }
