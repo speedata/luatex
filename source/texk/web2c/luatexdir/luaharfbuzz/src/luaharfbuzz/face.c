@@ -1,20 +1,5 @@
 #include "luaharfbuzz.h"
 
-#ifdef LuajitTeX
-
-static int lua_absindex (lua_State *L, int i) {
-  if (i < 0 && i > LUA_REGISTRYINDEX)
-    i += lua_gettop(L) + 1;
-  return i;
-}
-static void lua_seti (lua_State *L, int index, lua_Integer i) {
-  index = lua_absindex(L, index);
-  lua_pushinteger(L, i);
-  lua_insert(L, -2);
-  lua_settable(L, index);
-}
-#endif
-
 /* Size of static arrays we use to avoid heap allocating memory when reading
  * data from HarfBuzz. */
 #define STATIC_ARRAY_SIZE 128
@@ -287,8 +272,8 @@ static int face_collect_unicodes(lua_State *L) {
     hb_codepoint_t c = HB_SET_VALUE_INVALID;
 
     while (hb_set_next(codes, &c)) {
-      lua_pushnumber(L, ++i);
-      lua_pushnumber(L, c);
+      lua_pushinteger(L, ++i);
+      lua_pushinteger(L, c);
       lua_rawset(L, -3);
     }
   }
@@ -611,6 +596,26 @@ static int face_var_normalize_coords(lua_State *L) {
   return count;
 }
 
+// face_blob(face) -> harfbuzz.Blob|nil, err
+// Returns the underlying face blob as a harfbuzz.Blob userdata.
+static int face_blob(lua_State *L) {
+  Face *f = (Face *)luaL_checkudata(L, 1, "harfbuzz.Face");
+
+  hb_blob_t *hb = hb_face_reference_blob(*f);
+  if (!hb) {
+    lua_pushnil(L);
+    return 1;
+  }
+
+  // Create Blob userdata and attach the HarfBuzz blob without copying.
+  Blob *b = (Blob *)lua_newuserdata(L, sizeof(*b));
+  luaL_getmetatable(L, "harfbuzz.Blob");
+  lua_setmetatable(L, -2);
+
+  *b = hb;
+  return 1;
+}
+
 static int face_destroy(lua_State *L) {
   Face *f = (Face *)luaL_checkudata(L, 1, "harfbuzz.Face");
 
@@ -620,6 +625,7 @@ static int face_destroy(lua_State *L) {
 
 static const struct luaL_Reg face_methods[] = {
   { "__gc", face_destroy },
+  { "blob", face_blob },
   { "collect_unicodes", face_collect_unicodes },
   { "get_glyph_count", face_get_glyph_count },
   { "get_name", face_get_name },
